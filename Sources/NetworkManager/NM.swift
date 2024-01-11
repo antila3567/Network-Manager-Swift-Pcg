@@ -5,11 +5,11 @@ import Combine
 import Foundation
 
 public protocol NMProtocol {
-    func makeRequest<T: Codable>(with builder: NMRequestBuilder, type: T.Type) throws -> AnyPublisher<T, APIError>
+    func makeRequest<T: Codable>(with builder: NMRequestBuilder, type: T.Type) -> AnyPublisher<T, APIError>
 }
 
 public class NM: NMProtocol {
-    public func makeRequest<T: Codable>(with builder: NMRequestBuilder, type: T.Type) throws -> AnyPublisher<T, APIError> {
+    public func makeRequest<T: Codable>(with builder: NMRequestBuilder, type: T.Type) -> AnyPublisher<T, APIError> {
         do {
             let request = try builder.build()
             
@@ -34,7 +34,7 @@ public class NM: NMProtocol {
                 }
                 .eraseToAnyPublisher()
         } catch {
-           throw APIError.urlError
+            return Fail(error: APIError.urlError).eraseToAnyPublisher()
         }
     }
     
